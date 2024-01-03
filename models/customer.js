@@ -62,6 +62,11 @@ class Customer {
     return await Reservation.getReservationsForCustomer(this.id);
   }
 
+  /** return a customer's full name, defined as "first_name last_name" */
+  fullName() {
+    return this.firstName.concat(" ", this.lastName);
+  }
+
   /** save this customer. */
 
   async save() {
