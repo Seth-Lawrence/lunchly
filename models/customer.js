@@ -79,19 +79,20 @@ class Customer {
   }
 
 
+  /** get top 10 customers by # of reservations */
 
   static async topTen() {
     const results = await db.query(
       `SELECT customers.id,
-      first_name AS "firstName",
-      last_name  AS "lastName",
-      phone,
-      customers.notes,
-      COUNT(reservations.id) AS "reservations"
+        first_name AS "firstName",
+        last_name  AS "lastName",
+        phone,
+        customers.notes,
+        COUNT(reservations.id) AS "reservations"
       FROM customers
       JOIN reservations ON customers.id = reservations.customer_id
-      GROUP BY customer.id
-      ORDER BY reservations DESC
+      GROUP BY customers.id
+      ORDER BY reservations DESC, last_name, first_name
       LIMIT 10`
     )
 
@@ -106,7 +107,7 @@ class Customer {
 
   /** return a customer's full name, defined as "first_name last_name" */
   fullName() {
-    return this.firstName.concat(" ", this.lastName);
+    return `${this.firstName} ${this.lastName}`;
   }
 
   /** save this customer. */
