@@ -31,6 +31,24 @@ class Customer {
     return results.rows.map(c => new Customer(c));
   }
 
+  static async search(searchTerm) {
+    const results = await db.query(`
+          SELECT id,
+              first_name AS "firstName",
+              last_name  AS "lastName",
+              phone,
+              notes
+          FROM customers
+          WHERE
+          CONCAT(first_name, ' ', last_name) ilike '%$1%'
+          OR first_name ilike '%$1%'
+          OR last_lame ilike '%$1%'
+          ORDER BY last_name, first_name
+    `, [searchTerm]);
+
+    return results.rows.map(c => new Customer(c));
+  }
+
   /** get a customer by ID. */
 
   static async get(id) {
