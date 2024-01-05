@@ -78,6 +78,26 @@ class Customer {
     return new Customer(customer);
   }
 
+
+
+  static async topTen() {
+    const results = await db.query(
+      `SELECT customers.id,
+      first_name AS "firstName",
+      last_name  AS "lastName",
+      phone,
+      customers.notes,
+      COUNT(reservations.id) AS "reservations"
+      FROM customers
+      JOIN reservations ON customers.id = reservations.customer_id
+      GROUP BY customer.id
+      ORDER BY reservations DESC
+      LIMIT 10`
+    )
+
+    return results.rows.map(c => new Customer(c));
+  }
+
   /** get all reservations for this customer. */
 
   async getReservations() {
